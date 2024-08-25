@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import { cn } from "@/lib/utils";
+import Header from "@/components/shared/header";
+import { Providers } from "./providers";
+import Footer from "@/components/shared/footer";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +26,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <ClerkProvider>
+        <body className={cn(fontSans.variable)}>
+          <Providers>
+            <Toaster position="top-center" />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </Providers>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }

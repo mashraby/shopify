@@ -30,7 +30,7 @@ async function SingleProduct({ params: { productId } }: SingleProductProps) {
 
   return (
     <>
-      <div className="mt-[80px] container">
+      <div className="container">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>

@@ -7,9 +7,10 @@ import { toast } from "sonner";
 
 interface AddCartBtnProps {
   product: IProduct;
+  className?: string;
 }
 
-const AddCartBtn = ({ product }: AddCartBtnProps) => {
+const AddCartBtn = ({ product, className }: AddCartBtnProps) => {
   const { products, setProducts } = useContext(CartContext) as any;
 
   // handleAddToCart funksiyasini async qilish
@@ -46,7 +47,14 @@ const AddCartBtn = ({ product }: AddCartBtnProps) => {
     });
   };
 
-  return <Button onClick={handleAddToCartWithToast}>Add To Cart</Button>;
+  return (
+    <Button
+      className={className ? className : ""}
+      onClick={handleAddToCartWithToast}
+    >
+      Add To Cart
+    </Button>
+  );
 };
 
 export default AddCartBtn;

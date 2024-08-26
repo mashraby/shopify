@@ -6,6 +6,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  margin-top: 80px;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

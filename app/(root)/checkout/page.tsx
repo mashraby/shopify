@@ -32,6 +32,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Define the schema using zod
 const schema = z.object({
@@ -75,12 +76,29 @@ export default function Checkout() {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: any): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          console.log(data); // Payment Data saved
+          form.reset();
+          setProducts([]);
+          router.push("/payment-success");
+          resolve();
+        } catch (err) {
+          console.log(err);
+          reject(err);
+        }
+      }, 3000);
+    });
+  };
 
-    form.reset();
-    setProducts([]);
-    router.push("/payment-success");
+  const onSubmitWithToast = async (data: any) => {
+    await toast.promise(onSubmit(data), {
+      loading: "Payment data sending...",
+      success: "Payment Successful.",
+      error: "Something went wrong, please try again!",
+    });
   };
 
   const subtotal = products.reduce(
@@ -90,7 +108,7 @@ export default function Checkout() {
   );
 
   return (
-    <div className="container mx-auto p-4 md:p-6 lg:p-8 mt-[80px]">
+    <div className="container mx-auto p-4 md:p-6 lg:p-8">
       <h1 className="text-3xl font-bold mb-6">Checkout</h1>
 
       <Separator />
@@ -107,7 +125,7 @@ export default function Checkout() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmitWithToast)}>
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>

@@ -1,18 +1,21 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import AddCartBtn from "./addcartbtn";
 
-export default function ProductCard({
-  id,
-  image,
-  title,
-  price,
-  category,
-}: IProduct) {
+export default function ProductCard(product: IProduct) {
+  const { id, image, title, price, category } = product;
   return (
-    <Link href={"/product/" + id}>
-      <Card className="w-full max-w-xs cursor-pointer hover:scale-105 transition-all hover:shadow-2xl">
+    <Card className="w-full max-w-xs cursor-pointer hover:scale-105 transition-all hover:shadow-2xl">
+      <Link href={"/product/" + id}>
         <Image
           src={image}
           width={400}
@@ -21,15 +24,18 @@ export default function ProductCard({
           className="aspect-[1.6] object-contain"
         />
         <CardHeader className="p-4 flex items-center justify-between">
-          <CardTitle className="text-xl font-semibold line-clamp-1">
+          <CardTitle className="text-lg font-bold line-clamp-1">
             {title}
           </CardTitle>
-          <Badge variant="secondary">{category}</Badge>
         </CardHeader>
-        <CardContent className="p-4">
-          <p className="text-2xl font-semibold">${price}</p>
+        <CardContent className="flex justify-between px-4">
+          <Badge variant="secondary">{category}</Badge>
+          <p className="text-base font-semibold text-gray-500">${price}</p>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+      <CardFooter>
+        <AddCartBtn className="w-full" product={product} />
+      </CardFooter>
+    </Card>
   );
 }

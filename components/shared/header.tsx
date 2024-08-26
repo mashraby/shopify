@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { ShoppingBag, ShoppingCart } from "lucide-react";
@@ -14,12 +14,34 @@ export default function Header() {
     (sum: number, item: IProduct) => sum + item.quantity,
     0
   );
+
+  const [shadow, setShadow] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setShadow(true);
+      } else {
+        setShadow(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="container mx-auto px-4 md:px-6 lg:px-8">
-      <header className="fixed top-0 left-0 bg-white z-50 flex h-20 w-full shrink-0 items-center px-4 md:px-6">
-        <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
+      <header
+        className={`fixed top-0 left-0 bg-white z-50 flex h-20 w-full shrink-0 items-center px-4 md:px-6 transition-shadow ${
+          shadow ? "shadow-md" : ""
+        }`}
+      >
+        <Link href="/" className="mr-6 flex items-center" prefetch={false}>
           <ShoppingBag className="h-8 w-8" />
-          <span className="sr-only">Car E-commerce</span>
+          <span className="text-xl font-bold">Shopify</span>
         </Link>
         <div className="ml-auto flex gap-2">
           <Link

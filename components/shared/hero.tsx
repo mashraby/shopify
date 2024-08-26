@@ -8,8 +8,9 @@ export default function Hero() {
       <section className="container py-12">
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
           <div>
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              E-commerce
+            <h1 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
+              E-commerce <br />
+              <span className="text-red-400 font-extrabold">by Shopify</span>
             </h1>
             <p className="mt-3 text-xl text-muted-foreground">
               The most convenient and quality online store for you. You can find

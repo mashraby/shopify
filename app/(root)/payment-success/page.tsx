@@ -3,7 +3,7 @@ import { JSX, SVGProps } from "react";
 
 function PaymentSucces() {
   return (
-    <main className="flex flex-col items-center justify-center gap-8 py-12 md:py-24">
+    <section className="flex flex-col items-center justify-center gap-8 py-12 md:py-24 h-[80vh]">
       <div className="flex flex-col items-center justify-center gap-4">
         <CircleCheckIcon className="h-16 w-16 text-green-500" />
         <h1 className="text-3xl font-bold">Payment Successful</h1>
@@ -19,7 +19,7 @@ function PaymentSucces() {
       >
         Go to Homepage
       </Link>
-    </main>
+    </section>
   );
 }
 

@@ -92,9 +92,9 @@ export default function CartPage() {
                       <Image
                         src={item.image}
                         alt={item.title}
-                        width={100}
-                        height={100}
-                        className="rounded-md object-cover"
+                        width={60}
+                        height={60}
+                        className="rounded-md object-cover flex-shrink-0 md:w-[100px] md:h-[100px]"
                       />
                       <div className="flex flex-col gap-2 ml-4 md:flex-row">
                         <div className="grid gap-1.5">
@@ -105,7 +105,8 @@ export default function CartPage() {
                             ${item.price}
                           </p>
                         </div>
-                        <div className="flex items-center gap-2">
+
+                        <div className="flex items-center gap-1 md:gap-2">
                           <Button
                             onClick={() => handleDecreaseQty(item)}
                             variant="outline"
@@ -114,7 +115,7 @@ export default function CartPage() {
                             <Minus className="h-4 w-4" />
                             <span className="sr-only">Decrease quantity</span>
                           </Button>
-                          <span className="w-8 text-center">
+                          <span className="w-8 text-center m-0 p-0">
                             {item.quantity}
                           </span>
                           <Button

@@ -33,11 +33,15 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { CreditCard } from "lucide-react";
 
 // Define the schema using zod
 const schema = z.object({
   cardName: z.string().nonempty("Name on Card is required"),
-  cardNumber: z.string().nonempty("Card Number is required"),
+  cardNumber: z
+    .string()
+    .nonempty("Card Number is required")
+    .regex(/^\d{4} \d{4} \d{4} \d{4}$/, "Card Number must be 16 digits."),
   expMonth: z.string().nonempty("Expiry Month is required"),
   expYear: z.string().nonempty("Expiry Year is required"),
   cvv: z.string().nonempty("CVV is required").length(3, "CVV must be 3 digits"),
@@ -163,6 +167,14 @@ export default function Checkout() {
                       placeholder="1234 5678 9012 3456"
                       {...field}
                       className={errors.cardNumber ? "border-red-500" : ""}
+                      onChange={(e) => {
+                        const formattedValue = e.target.value
+                          .replace(/\D/g, "")
+                          .replace(/(\d{4})/g, "$1 ")
+                          .trim();
+                        field.onChange(formattedValue);
+                      }}
+                      maxLength={19}
                     />
                   )}
                 />
@@ -241,6 +253,7 @@ export default function Checkout() {
                         placeholder="123"
                         {...field}
                         className={errors.cvv ? "border-red-500" : ""}
+                        maxLength={3}
                       />
                     )}
                   />
@@ -432,6 +445,7 @@ export default function Checkout() {
           <CardFooter>
             <Button type="submit" className="w-full">
               Place Order
+              <CreditCard className="h-6 w-6 ml-2" />
             </Button>
           </CardFooter>
         </Card>

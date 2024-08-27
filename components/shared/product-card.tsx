@@ -23,12 +23,12 @@ export default function ProductCard(product: IProduct) {
           alt="Product"
           className="aspect-[1.6] object-contain"
         />
-        <CardHeader className="p-4 flex items-center justify-between">
-          <CardTitle className="text-lg font-bold line-clamp-1">
+        <CardHeader>
+          <CardTitle className="text-md font-bold line-clamp-1">
             {title}
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex justify-between px-4">
+        <CardContent className="flex justify-between">
           <Badge variant="secondary">{category}</Badge>
           <p className="text-base font-semibold text-gray-500">${price}</p>
         </CardContent>

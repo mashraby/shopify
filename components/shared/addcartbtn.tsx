@@ -49,6 +49,7 @@ const AddCartBtn = ({ product, className }: AddCartBtnProps) => {
 
   return (
     <Button
+      size={"sm"}
       className={className ? className : ""}
       onClick={handleAddToCartWithToast}
     >

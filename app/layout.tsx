@@ -8,6 +8,7 @@ import { Providers } from "./providers";
 import Footer from "@/components/shared/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { CircleCheckBig } from "lucide-react";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,7 +30,11 @@ export default function RootLayout({
       <ClerkProvider>
         <body className={cn(fontSans.variable)}>
           <Providers>
-            <Toaster position="top-center" />
+            <Toaster
+              icons={{ success: <CircleCheckBig className="text-[#16A349]" /> }}
+              style={{ color: "green" }}
+              position="top-center"
+            />
             <Header />
             <main>{children}</main>
             <Footer />

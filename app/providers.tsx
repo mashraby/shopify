@@ -2,8 +2,17 @@
 
 import React from "react";
 import { CartContextProvider } from "@/contexts/cart-context";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/shared/theme-provider";
 
 export const Providers = ({ children }: Children) => {
-  return <CartContextProvider>{children}</CartContextProvider>;
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <CartContextProvider>{children}</CartContextProvider>
+    </ThemeProvider>
+  );
 };

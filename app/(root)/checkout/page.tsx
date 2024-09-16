@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +34,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CreditCard } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 // Define the schema using zod
 const schema = z.object({
@@ -57,11 +58,15 @@ const schema = z.object({
 export default function Checkout() {
   const { products, setProducts } = useContext(CartContext) as any;
   const router = useRouter();
-  const form = useForm();
+  const { user } = useUser();
+
+  // Use only one useForm call with schema and defaultValues
   const {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    reset,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -80,12 +85,33 @@ export default function Checkout() {
     },
   });
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        const emailAddress = Array.isArray(user.emailAddresses)
+          ? user.emailAddresses[0] || ""
+          : typeof user.emailAddresses === "string"
+          ? user.emailAddresses
+          : "";
+
+        setValue("cardName", `${user.firstName || ""} ${user.lastName || ""}`);
+        setValue("firstName", user.firstName || "");
+        setValue("lastName", user.lastName || "");
+        setValue("email", (emailAddress as string) || "");
+      }
+    };
+
+    fetchUserData();
+  }, [user, setValue]);
+
+  console.log(user, user?.lastName, user?.emailAddresses[0].emailAddress);
+
   const onSubmit = async (data: any): Promise<void> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
           console.log(data); // Payment Data saved
-          form.reset();
+          reset(); // Reset the form
           setProducts([]);
           router.push("/payment-success");
           resolve();
@@ -251,9 +277,9 @@ export default function Checkout() {
                       <Input
                         id="cvv"
                         placeholder="123"
+                        type="number"
                         {...field}
                         className={errors.cvv ? "border-red-500" : ""}
-                        maxLength={3}
                       />
                     )}
                   />
@@ -264,64 +290,61 @@ export default function Checkout() {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
-              <CardTitle>User Information</CardTitle>
+              <CardTitle>Personal Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Controller
-                    name="firstName"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id="firstName"
-                        placeholder="John"
-                        {...field}
-                        className={errors.firstName ? "border-red-500" : ""}
-                      />
-                    )}
-                  />
-                  {errors.firstName && (
-                    <span className="text-red-500">
-                      {errors.firstName.message}
-                    </span>
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      id="firstName"
+                      placeholder="John"
+                      {...field}
+                      className={errors.firstName ? "border-red-500" : ""}
+                    />
                   )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Controller
-                    name="lastName"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id="lastName"
-                        placeholder="Doe"
-                        {...field}
-                        className={errors.lastName ? "border-red-500" : ""}
-                      />
-                    )}
-                  />
-                  {errors.lastName && (
-                    <span className="text-red-500">
-                      {errors.lastName.message}
-                    </span>
-                  )}
-                </div>
+                />
+                {errors.firstName && (
+                  <span className="text-red-500">
+                    {errors.firstName.message}
+                  </span>
+                )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="lastName">Last Name</Label>
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      id="lastName"
+                      placeholder="Doe"
+                      {...field}
+                      className={errors.lastName ? "border-red-500" : ""}
+                    />
+                  )}
+                />
+                {errors.lastName && (
+                  <span className="text-red-500">
+                    {errors.lastName.message}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
                 <Controller
                   name="email"
                   control={control}
                   render={({ field }) => (
                     <Input
                       id="email"
-                      type="email"
                       placeholder="john.doe@example.com"
+                      type="email"
                       {...field}
                       className={errors.email ? "border-red-500" : ""}
                     />
@@ -358,7 +381,7 @@ export default function Checkout() {
                     render={({ field }) => (
                       <Input
                         id="city"
-                        placeholder="New York"
+                        placeholder="City"
                         {...field}
                         className={errors.city ? "border-red-500" : ""}
                       />
@@ -376,7 +399,7 @@ export default function Checkout() {
                     render={({ field }) => (
                       <Input
                         id="zipCode"
-                        placeholder="10001"
+                        placeholder="ZIP Code"
                         {...field}
                         className={errors.zipCode ? "border-red-500" : ""}
                       />
@@ -397,14 +420,14 @@ export default function Checkout() {
                   render={({ field }) => (
                     <Select onValueChange={field.onChange}>
                       <SelectTrigger id="country">
-                        <SelectValue placeholder="Select a country" />
+                        <SelectValue placeholder="Country" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="uz">Uzbekistan</SelectItem>
-                        <SelectItem value="us">United States</SelectItem>
-                        <SelectItem value="ca">Canada</SelectItem>
-                        <SelectItem value="uk">United Kingdom</SelectItem>
-                        <SelectItem value="au">Australia</SelectItem>
+                        {/* Add country options here */}
+                        <SelectItem value="UZ">Uzbekistan</SelectItem>
+                        <SelectItem value="US">United States</SelectItem>
+                        <SelectItem value="CA">Canada</SelectItem>
+                        {/* More countries */}
                       </SelectContent>
                     </Select>
                   )}

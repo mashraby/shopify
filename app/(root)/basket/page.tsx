@@ -88,7 +88,7 @@ export default function CartPage() {
                     key={item.id}
                     className="flex items-center justify-between py-2 px-4"
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 w-full">
                       <Image
                         src={item.image}
                         alt={item.title}
@@ -96,7 +96,7 @@ export default function CartPage() {
                         height={60}
                         className="rounded-md object-cover flex-shrink-0 md:w-[100px] md:h-[100px]"
                       />
-                      <div className="flex flex-col gap-2 ml-4 md:flex-row">
+                      <div className="flex flex-col gap-2 ml-4 md:flex-row md:justify-between w-full">
                         <div className="grid gap-1.5">
                           <h3 className="font-semibold line-clamp-1 md:line-clamp-2">
                             {item.title}
@@ -106,7 +106,7 @@ export default function CartPage() {
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-1 md:gap-2">
+                        <div className="flex justify-end items-center gap-1 md:gap-2">
                           <Button
                             onClick={() => handleDecreaseQty(item)}
                             variant="outline"

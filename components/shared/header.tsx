@@ -7,6 +7,7 @@ import { ShoppingBag, ShoppingCart } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { CartContext } from "@/contexts/cart-context";
 import { cn } from "@/lib/utils";
+import { ModeToggle } from "./toggle-theme";
 
 export default function Header() {
   const { products } = useContext(CartContext) as any;
@@ -35,15 +36,16 @@ export default function Header() {
   return (
     <div className="container mx-auto px-4 md:px-6 lg:px-8">
       <header
-        className={`fixed top-0 left-0 bg-white z-50 flex h-20 w-full shrink-0 items-center px-4 md:px-6 transition-shadow ${
+        className={`fixed top-0 left-0 bg-white dark:bg-[#0D0A09] z-50 flex h-20 w-full shrink-0 items-center px-4 md:px-6 transition-shadow ${
           shadow ? "shadow-md" : ""
         }`}
       >
         <Link href="/" className="mr-6 flex items-center" prefetch={false}>
-          <ShoppingBag className="h-8 w-8" />
+          <ShoppingBag className="h-8 w-8 mr-1 text-[#16a349]" />
           <span className="text-xl font-bold">Shopify</span>
         </Link>
         <div className="ml-auto flex gap-2">
+          <ModeToggle />
           <Link
             href={"/basket"}
             className={cn(

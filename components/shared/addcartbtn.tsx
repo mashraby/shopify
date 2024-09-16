@@ -4,13 +4,19 @@ import React, { useContext } from "react";
 import { Button } from "../ui/button";
 import { CartContext } from "@/contexts/cart-context";
 import { toast } from "sonner";
+import BasketActions from "./basket-actions";
 
 interface AddCartBtnProps {
   product: IProduct;
   className?: string;
+  isBasket?: boolean;
 }
 
-const AddCartBtn = ({ product, className }: AddCartBtnProps) => {
+const AddCartBtn = ({
+  product,
+  className,
+  isBasket = true,
+}: AddCartBtnProps) => {
   const { products, setProducts } = useContext(CartContext) as any;
 
   // handleAddToCart funksiyasini async qilish
@@ -47,7 +53,9 @@ const AddCartBtn = ({ product, className }: AddCartBtnProps) => {
     });
   };
 
-  return (
+  const condition = products?.find((p: IProduct) => p.id == product.id);
+
+  return !condition && isBasket ? (
     <Button
       size={"sm"}
       className={className ? className : ""}
@@ -55,6 +63,8 @@ const AddCartBtn = ({ product, className }: AddCartBtnProps) => {
     >
       Add To Cart
     </Button>
+  ) : (
+    <BasketActions item={condition} />
   );
 };
 

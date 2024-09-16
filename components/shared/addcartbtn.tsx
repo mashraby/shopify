@@ -9,14 +9,9 @@ import BasketActions from "./basket-actions";
 interface AddCartBtnProps {
   product: IProduct;
   className?: string;
-  isBasket?: boolean;
 }
 
-const AddCartBtn = ({
-  product,
-  className,
-  isBasket = true,
-}: AddCartBtnProps) => {
+const AddCartBtn = ({ product, className }: AddCartBtnProps) => {
   const { products, setProducts } = useContext(CartContext) as any;
 
   // handleAddToCart funksiyasini async qilish
@@ -53,9 +48,7 @@ const AddCartBtn = ({
     });
   };
 
-  const condition = products?.find((p: IProduct) => p.id == product.id);
-
-  return !condition && isBasket ? (
+  return (
     <Button
       size={"sm"}
       className={className ? className : ""}
@@ -63,8 +56,6 @@ const AddCartBtn = ({
     >
       Add To Cart
     </Button>
-  ) : (
-    <BasketActions item={condition} />
   );
 };
 
